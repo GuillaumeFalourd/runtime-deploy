@@ -16,9 +16,8 @@ jobs:
     outputs: 
       tasks: ${{ steps.tasks.outputs.tasks }}
     steps:
-      - name: Check Runner
-        run: echo 🤖 OS runner is $(uname)
-        shell: bash
+      - name: Checkout repository content
+        uses: actions/checkout@v3
 
       # - name: Get Token
       #   shell: bash
@@ -35,10 +34,10 @@ jobs:
         shell: bash
         run: |
           # Would call Runtime API through curl: POST /run/deploy/app/self-hosted
-          JSON = $(cat ${{ github.action_path }}/tasks.json)
+          JSON = $(cat ${{ github.workspace }}/tasks.json)
           echo "JSON: $JSON"
           myArray=()
-          jq -c '.tasks.[]' ${{ github.action_path }}/tasks.json | while read i; do
+          jq -c '.tasks.[]' ${{ github.workspace }}/tasks.json | while read i; do
             echo "ITEM: $i"
             taskId=$(jq --raw-output '.runTaskId' <<< "$i")
             echo "TASK: $taskId"
