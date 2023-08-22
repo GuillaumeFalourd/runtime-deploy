@@ -34,24 +34,18 @@ jobs:
         shell: bash
         run: |
           # Would call Runtime API through curl: POST /run/deploy/app/self-hosted
-          echo "* * * JSON * * *"
-          JSON=$(cat ${{ github.workspace }}/tasks.json)
-          echo "JSON: $JSON"
           myArray=()
-          echo "* * * TASKS * * *"
           TASKS=$(cat ${{ github.workspace }}/tasks.json | jq '.tasks')
           echo "TASKS: $TASKS"
-          # echo "* * * LOOP * * *"
-          # $TASKS | while read i; do
-          #   echo "ITEM: $i"
-          #   taskId=$(jq --raw-output '.runTaskId' <<< "$i")
-          #   echo "TASK: $taskId"
-          #   myArray+=("$taskId")
-          #   echo "- - - - -"
-          # done
-          # myArray=$(jq --compact-output --null-input '$ARGS.positional' --args -- "${myArray[@]}")
-          # echo "Updated tasks list: $myArray"
-          # echo "tasks=$myArray" >> $GITHUB_OUTPUT
+          echo "* * * LOOP * * *"
+          $TASKS | jq -r '.[].runTaskId' | while read id ; do
+            echo "TASK ID: "${id}"
+            myArray+=("${id}")
+            echo "- - - - -"
+          done
+          myArray=$(jq --compact-output --null-input '$ARGS.positional' --args -- "${myArray[@]}")
+          echo "Updated tasks list: $myArray"
+          echo "tasks=$myArray" >> $GITHUB_OUTPUT
 
   deploy:
     runs-on: ubuntu-latest
