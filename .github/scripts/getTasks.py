@@ -4,9 +4,8 @@ import json
 output_file = os.getenv('GITHUB_OUTPUT')
 WORKSPACE = os.getenv("WORKSPACE")
 
-file=f"{WORKSPACE}/tasks.json"
 # Opening JSON file
-f = open('file')
+f = open(f"{WORKSPACE}/tasks.json")
  
 # returns JSON object as
 # a dictionary
