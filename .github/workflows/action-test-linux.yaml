@@ -2,9 +2,9 @@ name: Action test Ubuntu
 
 on:
   push:
-    paths:
-      - '.github/workflows/action-test-linux.yaml'
-      - 'action.yaml'
+    # paths:
+    #   - '.github/workflows/action-test-linux.yaml'
+    #   - 'action.yaml'
   workflow_dispatch:
 
 concurrency:
@@ -28,7 +28,7 @@ jobs:
         shell: bash
         run: |
           TOKEN_OUTPUT=$(curl --location --request POST \
-          'https://idm.stackspot.com/realms/growth/protocol/openid-connect/token' \
+          'https://idm.qa.stackspot.com/realms/growth/protocol/openid-connect/token' \
           --header 'Content-Type: application/x-www-form-urlencoded' \
           --data-urlencode 'client_id=${{ inputs.client_id }}' \
           --data-urlencode 'grant_type=client_credentials' \
@@ -39,3 +39,10 @@ jobs:
         run: |
           curl -s "https://viacep.com.br/ws/06727010/json/" > cep_data.json
           cat cep_data.json  # Apenas para visualizar o resultado no log.
+
+  reusable:
+    uses: ./.github/workflows/reusable-workflow.yaml
+    with:
+      CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+      REALM: ${{ secrets.REALM }}

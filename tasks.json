@@ -1,0 +1,36 @@
+{
+    "runId": "run123",
+    "type": "DEPLOY_SELF_HOSTED",
+    "tasks": [
+      {
+        "order": 1,
+        "runTaskId": "abc123",
+        "type": "IAC_SELF_HOSTED",
+        "inputs": {}
+      },
+      {
+        "order": 2,
+        "runTaskId": "abc124",
+        "type": "DEPLOY_SELF_HOSTED",
+        "bucket": "meu-bucket",
+        "tfstate_path": "app123/apply-plugin-alias1/terraform.tfstate"
+      },
+      {
+        "order": 3,
+        "runTaskId": "abc125",
+        "type": "IAC_SELF_HOSTED",
+        "inputs": {}
+      },
+      {
+        "runTaskId": "abc126",
+        "type": "DEPLOY_SELF_HOSTED",
+        "tfstate_path": "app123/apply-plugin-alias2/terraform.tfstate"
+      },
+      {
+        "runTaskId": "abc127",
+        "type": "DESTROY_SELF_HOSTED",
+        "tfstate_path": "app123/apply-plugin-alias3/terraform.tfstate"
+      }
+    ]
+  }
+  

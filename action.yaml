@@ -9,6 +9,9 @@ inputs:
   client_key:
     description: Account client key
     required: true
+  realm:
+    description: Account client realm
+    required: true
 
 runs:
   using: "composite"
@@ -21,7 +24,7 @@ runs:
       shell: bash
       run: |
         TOKEN_OUTPUT=$(curl --location --request POST \
-        'https://idm.stackspot.com/realms/growth/protocol/openid-connect/token' \
+        'https://idm.stackspot.com/realms/${{ inputs.realm }}/protocol/openid-connect/token' \
         --header 'Content-Type: application/x-www-form-urlencoded' \
         --data-urlencode 'client_id=${{ inputs.client_id }}' \
         --data-urlencode 'grant_type=client_credentials' \
@@ -30,8 +33,9 @@ runs:
     - name: Fetch Endpoint
       shell: bash
       run: |
-        curl -s "https://viacep.com.br/ws/06727010/json/" > cep_data.json
-        cat cep_data.json  # Apenas para visualizar o resultado no log.
+        "Would call Runtime API through curl: POST /run/deploy/app/self-hosted"
+        JSON = $(cat ${{ github.action_path }}/tasks.json)
+        echo "JSON: $JSON"
 
 branding:
     icon: 'terminal'
