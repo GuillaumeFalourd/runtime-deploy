@@ -39,10 +39,10 @@ jobs:
           echo "JSON: $JSON"
           myArray=()
           echo "* * * TASKS * * *"
-          TASKS=( $(cat ${{ github.workspace }}/tasks.json | jq ".tasks" ) )
+          TASKS=( $(cat ${{ github.workspace }}/tasks.json | jq '.tasks' ) )
           echo "TASKS: $TASKS"
           echo "* * * LOOP * * *"
-          jq -c '.tasks.[]' ${{ github.workspace }}/tasks.json | while read i; do
+          $TASKS | while read i; do
             echo "ITEM: $i"
             taskId=$(jq --raw-output '.runTaskId' <<< "$i")
             echo "TASK: $taskId"
