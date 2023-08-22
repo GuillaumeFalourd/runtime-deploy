@@ -28,27 +28,22 @@ jobs:
       #     --data-urlencode 'client_id=${{ secrets.CLIENT_ID }}' \
       #     --data-urlencode 'grant_type=client_credentials' \
       #     --data-urlencode 'client_secret=${{ secrets.CLIENT_SECRET }}')
-        
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: 3.10.9
+
+      - name: Install Python dependencies
+        run: python -m pip install --upgrade pip install requests
+
       - name: Fetch Endpoint
         id: tasks
         shell: bash
         run: |
-          # Would call Runtime API through curl: POST /run/deploy/app/self-hosted
-          myArray=()
-          TASKS=$(cat ${{ github.workspace }}/tasks.json | jq '.tasks')
-          echo "TASKS: $TASKS"
-          cat ${{ github.workspace }}/tasks.json | jq '.tasks' >> new.json
-          cat ${{ github.workspace }}/new.json
-          chmod + ${{ github.workspace }}/new.json
-          echo "* * * LOOP * * *"
-          ${{ github.workspace }}/new.json | jq -r '.[].runTaskId' | while read id ; do
-            echo "TASK ID: ${id}"
-            myArray+=("${id}")
-            echo "- - - - -"
-          done
-          myArray=$(jq --compact-output --null-input '$ARGS.positional' --args -- "${myArray[@]}")
-          echo "Updated tasks list: $myArray"
-          echo "tasks=$myArray" >> $GITHUB_OUTPUT
+          TASKS=$(python .github/scripts/getTasks.py)
+          echo "TASKS=$TASKS"
+        env:
+          WORKSPACE: ${{ github.workspace }}
 
   deploy:
     runs-on: ubuntu-latest
