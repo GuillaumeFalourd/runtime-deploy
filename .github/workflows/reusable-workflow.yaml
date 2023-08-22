@@ -37,7 +37,7 @@ jobs:
           JSON=$(cat ${{ github.workspace }}/tasks.json)
           echo "JSON: $JSON"
           myArray=()
-          TASKS=( $(jq -r 'tasks[]' json) )
+          TASKS=( $(jq -r '.tasks[]' json) )
           echo "Tasks: $TASKS"
           jq -c '.tasks.[]' ${{ github.workspace }}/tasks.json | while read i; do
             echo "ITEM: $i"
