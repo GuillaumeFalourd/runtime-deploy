@@ -42,7 +42,7 @@ jobs:
 
   reusable:
     uses: ./.github/workflows/reusable-workflow.yaml
-    with:
+    secrets:
       CLIENT_ID: ${{ secrets.CLIENT_ID }}
       CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
       REALM: ${{ secrets.REALM }}
