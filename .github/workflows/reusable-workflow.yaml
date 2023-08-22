@@ -37,8 +37,10 @@ jobs:
           myArray=()
           TASKS=$(cat ${{ github.workspace }}/tasks.json | jq '.tasks')
           echo "TASKS: $TASKS"
+          $TASKS >> new.json
+          cat ${{ github.workspace }}/new.json
           echo "* * * LOOP * * *"
-          ${{ github.workspace }}/tasks.json | jq -r '.tasks.runTaskId' | while read id ; do
+          ${{ github.workspace }}/new.json | jq -r '.[].runTaskId' | while read id ; do
             echo "TASK ID: ${id}"
             myArray+=("${id}")
             echo "- - - - -"
