@@ -34,7 +34,7 @@ jobs:
         shell: bash
         run: |
           # Would call Runtime API through curl: POST /run/deploy/app/self-hosted
-          JSON = $(cat ${{ github.workspace }}/tasks.json)
+          JSON=$(cat ${{ github.workspace }}/tasks.json)
           echo "JSON: $JSON"
           myArray=()
           jq -c '.tasks.[]' ${{ github.workspace }}/tasks.json | while read i; do
