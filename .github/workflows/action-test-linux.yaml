@@ -12,33 +12,33 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  ubuntu:
-    strategy:
-      matrix:
-        os: [ubuntu-20.04, ubuntu-22.04, ubuntu-latest]
-    runs-on: ${{ matrix.os }}
-    steps:
-      - name: Run runtime deploy
-        uses: rmnobarra/runtime-deploy@v1
-        with:
-          client_id: ${{ secrets.CLIENT_ID }}
-          client_key: ${{ secrets.CLIENT_KEY }}
+  # ubuntu:
+  #   strategy:
+  #     matrix:
+  #       os: [ubuntu-20.04, ubuntu-22.04, ubuntu-latest]
+  #   runs-on: ${{ matrix.os }}
+  #   steps:
+  #     - name: Run runtime deploy
+  #       uses: rmnobarra/runtime-deploy@v1
+  #       with:
+  #         client_id: ${{ secrets.CLIENT_ID }}
+  #         client_key: ${{ secrets.CLIENT_KEY }}
 
-      - name: Get Token
-        shell: bash
-        run: |
-          TOKEN_OUTPUT=$(curl --location --request POST \
-          'https://idm.qa.stackspot.com/realms/growth/protocol/openid-connect/token' \
-          --header 'Content-Type: application/x-www-form-urlencoded' \
-          --data-urlencode 'client_id=${{ inputs.client_id }}' \
-          --data-urlencode 'grant_type=client_credentials' \
-          --data-urlencode 'client_secret=${{ inputs.client_key }}')
+  #     - name: Get Token
+  #       shell: bash
+  #       run: |
+  #         TOKEN_OUTPUT=$(curl --location --request POST \
+  #         'https://idm.qa.stackspot.com/realms/growth/protocol/openid-connect/token' \
+  #         --header 'Content-Type: application/x-www-form-urlencoded' \
+  #         --data-urlencode 'client_id=${{ inputs.client_id }}' \
+  #         --data-urlencode 'grant_type=client_credentials' \
+  #         --data-urlencode 'client_secret=${{ inputs.client_key }}')
 
-      - name: Fetch Endpoint
-        shell: bash
-        run: |
-          curl -s "https://viacep.com.br/ws/06727010/json/" > cep_data.json
-          cat cep_data.json  # Apenas para visualizar o resultado no log.
+  #     - name: Fetch Endpoint
+  #       shell: bash
+  #       run: |
+  #         curl -s "https://viacep.com.br/ws/06727010/json/" > cep_data.json
+  #         cat cep_data.json  # Apenas para visualizar o resultado no log.
 
   reusable:
     uses: ./.github/workflows/reusable-workflow.yaml
