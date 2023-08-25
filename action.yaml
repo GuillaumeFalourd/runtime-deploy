@@ -21,21 +21,27 @@ runs:
       shell: bash
 
     - name: Get Token
+      id: getToken
       shell: bash
       run: |
+        "Call IDM"
         TOKEN_OUTPUT=$(curl --location --request POST \
         'https://idm.stackspot.com/realms/${{ inputs.realm }}/protocol/openid-connect/token' \
         --header 'Content-Type: application/x-www-form-urlencoded' \
         --data-urlencode 'client_id=${{ inputs.client_id }}' \
         --data-urlencode 'grant_type=client_credentials' \
         --data-urlencode 'client_secret=${{ inputs.client_key }}')
+         ACCESS_TOKEN=$(echo $TOKEN_OUTPUT | jq '.access-token')
+         ACCESS_TOKEN=$ACCESS_TOKEN >> GITHUB_OUTPUT
       
     - name: Fetch Endpoint
       shell: bash
       run: |
-        "Would call Runtime API through curl: POST /run/deploy/app/self-hosted"
-        JSON = $(cat ${{ github.action_path }}/tasks.json)
-        echo "JSON: $JSON"
+        "Call Runtime API"
+        RESPONSE=$(curl --location --request GET \
+        'https://runtime-manager.stackspot.com/v1/runtime-environment' \
+        --header 'Authorization: Bearer ${{ steps.getToken.outputs.ACCESS_TOKEN }} ')
+        echo "RESPONSE: $RESPONSE"
 
 branding:
     icon: 'terminal'
